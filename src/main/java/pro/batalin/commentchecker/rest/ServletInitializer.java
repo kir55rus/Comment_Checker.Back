@@ -1,4 +1,4 @@
-package pro.batalin.commentchecker;
+package pro.batalin.commentchecker.rest;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;

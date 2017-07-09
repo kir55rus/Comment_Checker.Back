@@ -1,4 +1,4 @@
-package pro.batalin.commentchecker;
+package pro.batalin.commentchecker.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
