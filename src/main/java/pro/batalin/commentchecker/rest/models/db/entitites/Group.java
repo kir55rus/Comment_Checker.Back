@@ -1,5 +1,7 @@
 package pro.batalin.commentchecker.rest.models.db.entitites;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 
 /**
@@ -11,6 +13,8 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Length(min = 3, max = 200)
     private String name;
 
     public Group() {
