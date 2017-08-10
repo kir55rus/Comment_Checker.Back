@@ -1,0 +1,11 @@
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL82Dialect
+spring.jpa.show-sql=true
+
+spring.datasource.url=jdbc:postgresql://localhost/db_name
+spring.datasource.username=db_user
+spring.datasource.password=db_pass
+
+# FLYWAY (FlywayProperties)
+flyway.enabled=true
+flyway.locations=classpath:db/migration
