@@ -1,24 +1,18 @@
-package pro.batalin.commentchecker.rest.models.db.entitites;
+package pro.batalin.commentchecker.rest.mapping.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
 
 /**
  * @author Kirill Batalin (kir55rus)
  */
-@Entity
-@Table(name = "query_group")
-public class Group {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class GroupDto {
     private Integer id;
-
     @Length(min = 3, max = 200)
-    @Column(name = "name", nullable = false)
     private String name;
 
-    public Group() {
+    public GroupDto() {
     }
 
     public Integer getId() {

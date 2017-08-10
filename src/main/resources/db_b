@@ -1,0 +1,93 @@
+create table groups
+(
+	id serial not null
+		constraint groups_pkey
+			primary key,
+	name varchar(255) not null
+)
+;
+
+create table "searchQueries"
+(
+	id bigserial not null
+		constraint "searchQueries_pkey"
+			primary key,
+	"searchQuery" varchar(255) not null,
+	frequency bigint not null,
+	"yandexChecked" boolean default false not null,
+	"googleChecked" boolean default false not null,
+	"groupId" integer not null
+		constraint sq_groups_fk
+			references groups
+				on update cascade on delete cascade
+)
+;
+
+create table urls
+(
+	id bigserial not null
+		constraint urls_pkey
+			primary key,
+	url text not null
+		constraint url_uniq
+			unique,
+	"commentBlock" integer default 0 not null,
+	"urlDate" timestamp default now()
+)
+;
+
+create table settings
+(
+	id serial not null
+		constraint settings_pkey
+			primary key,
+	name varchar(255) not null,
+	value text not null
+)
+;
+
+create table "searchQueriesUrls"
+(
+	"searchQueryId" bigint not null
+		constraint searchQueriesUrls_searchQueryId_fkey
+			references "searchQueries"
+				on update cascade on delete cascade,
+	"urlId" bigint not null
+		constraint searchQueriesUrls_urlId_fkey
+			references urls
+				on update cascade on delete cascade,
+	"searchEngine" varchar(50) not null,
+	position integer not null,
+	weight bigint default 0 not null,
+	constraint "searchQueriesUrls_pkey"
+		primary key (searchQueryId, urlId, searchEngine, position)
+)
+;
+
+create table comments
+(
+	id bigserial not null
+		constraint comments_pkey
+			primary key,
+	"urlId" bigint not null
+		constraint comments_urlId_fkey
+			references urls,
+	"commentText" text not null,
+	"commentDate" timestamp default now() not null
+)
+;
+
+create table "commentChecks"
+(
+	id bigserial not null
+		constraint "commentChecks_pkey"
+			primary key,
+	"checkTime" timestamp default now() not null,
+	result integer not null,
+	"commentId" bigint not null
+		constraint commentChecks_commentId_fkey
+			references comments,
+	percent integer default 0 not null
+)
+;
+

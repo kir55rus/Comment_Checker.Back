@@ -2,11 +2,14 @@ package pro.batalin.commentchecker.rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import pro.batalin.commentchecker.rest.models.ApiResponse;
+import pro.batalin.commentchecker.rest.mapping.dto.SettingsDto;
+import pro.batalin.commentchecker.rest.mapping.mappers.ErrorMapper;
+import pro.batalin.commentchecker.rest.mapping.mappers.SettingsMapper;
 import pro.batalin.commentchecker.rest.models.db.entitites.Settings;
 import pro.batalin.commentchecker.rest.models.db.repositories.SettingsRepository;
 
@@ -17,42 +20,42 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping(path = "rest/settings")
-public class SettingsController {
+public class SettingsController extends BaseController {
 
     private final SettingsRepository settingsRepository;
+    private final ErrorMapper errorMapper;
+    private final SettingsMapper settingsMapper;
 
     @Autowired
-    public SettingsController(SettingsRepository settingsRepository) {
+    public SettingsController(SettingsRepository settingsRepository,
+                              ErrorMapper errorMapper,
+                              SettingsMapper settingsMapper) {
         this.settingsRepository = settingsRepository;
+        this.errorMapper = errorMapper;
+        this.settingsMapper = settingsMapper;
     }
 
-    @RequestMapping(path = "", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<ApiResponse> getAll() {
-        try {
-            return ResponseEntity.ok(ApiResponse.withData(settingsRepository.findAll()));
-        } catch (DataAccessException e) {
-            return ResponseEntity.badRequest().body(ApiResponse.withError(e.getLocalizedMessage()));
-        }
+    @RequestMapping(path = "", method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(settingsMapper.toDto(settingsRepository.findAll()));
     }
 
-    @RequestMapping(path = "{id}", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<ApiResponse> editById(
+    @RequestMapping(path = "{id}", method = RequestMethod.PUT,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public ResponseEntity<?> editById(
             @PathVariable int id,
-            @Valid @RequestBody Settings newSettings,
+            @Valid @RequestBody SettingsDto newSettings,
             Errors errors) {
         if (errors.hasErrors()) {
-            String errorMessage = errors.getFieldError().toString();
-            return ResponseEntity.badRequest().body(ApiResponse.withError(errorMessage));
+            return ResponseEntity.badRequest()
+                    .body(errorMapper.toDto(errors));
         }
 
-        try {
-            Settings settings = settingsRepository.findOne(id);
-            settings.setName(newSettings.getName());
-            settings.setValue(newSettings.getValue());
-            settingsRepository.save(settings);
-            return ResponseEntity.ok(ApiResponse.withData(settings));
-        } catch (DataAccessException e) {
-            return ResponseEntity.badRequest().body(ApiResponse.withError(e.getLocalizedMessage()));
-        }
+        Settings settings = settingsRepository.findOne(id);
+        settings.setName(newSettings.getName());
+        settings.setValue(newSettings.getValue());
+        settingsRepository.save(settings);
+        return ResponseEntity.ok(settingsMapper.toDto(settings));
     }
 }

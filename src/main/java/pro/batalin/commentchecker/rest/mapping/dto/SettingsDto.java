@@ -1,32 +1,29 @@
-package pro.batalin.commentchecker.rest.models.db.entitites;
+package pro.batalin.commentchecker.rest.mapping.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.*;
 
 /**
  * @author Kirill Batalin (kir55rus)
  */
-@Entity
-@Table(name = "settings")
-public class Settings {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SettingsDto {
+    private Long id;
 
     @Length(min = 1, max = 250)
     private String name;
-
     private String value;
 
-    public Settings() {
+    public SettingsDto() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
