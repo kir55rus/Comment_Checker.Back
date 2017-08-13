@@ -26,7 +26,7 @@ public class SearchQueryDto {
     private Boolean googleChecked;
 
     @NotNull
-    private Integer groupId;
+    private GroupDto group;
 
     public SearchQueryDto() {
     }
@@ -71,11 +71,11 @@ public class SearchQueryDto {
         this.googleChecked = googleChecked;
     }
 
-    public Integer getGroupId() {
-        return groupId;
+    public GroupDto getGroup() {
+        return group;
     }
 
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
+    public void setGroup(GroupDto group) {
+        this.group = group;
     }
 }

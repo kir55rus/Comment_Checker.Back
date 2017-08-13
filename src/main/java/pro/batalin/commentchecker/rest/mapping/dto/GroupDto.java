@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 /**
  * @author Kirill Batalin (kir55rus)
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupDto {
     private Integer id;
     @Length(min = 3, max = 200)

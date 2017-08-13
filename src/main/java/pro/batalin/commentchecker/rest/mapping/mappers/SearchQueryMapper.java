@@ -9,16 +9,16 @@ import pro.batalin.commentchecker.rest.models.db.entitites.SearchQuery;
 /**
  * @author Kirill Batalin (kir55rus)
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {GroupMapper.class})
 public interface SearchQueryMapper {
-    @Mapping(target = "groupId", source = "group.id")
     SearchQueryDto toDto(SearchQuery searchQuery);
 
     Iterable<SearchQueryDto> toDto(Iterable<SearchQuery> searchQueries);
 
     @Mappings({
-            @Mapping(target = "group.id", source = "groupId"),
-            @Mapping(target = "queryUrls", ignore = true)
+            @Mapping(target = "queryUrls", ignore = true),
+            @Mapping(target = "yandexChecked", defaultValue = "false"),
+            @Mapping(target = "googleChecked", defaultValue = "false"),
     })
     SearchQuery toInner(SearchQueryDto searchQueryDto);
 }
